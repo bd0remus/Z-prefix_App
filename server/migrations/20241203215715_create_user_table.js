@@ -6,8 +6,8 @@ exports.up = function(knex) {
   return knex.schema.createTable('toy_store', table => {
     table.increments();
     table.string('firstname', 250);
-    table.string('lastname', 250);
-    table.string('password', 250);
+    table.string('lastname', 250).notNullable();
+    table.string('password', 250).notNullable();
   });
 };
 

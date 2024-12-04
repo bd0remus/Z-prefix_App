@@ -6,9 +6,9 @@ exports.up = function(knex) {
   return knex.schema.createTable('item', table => {
     table.increments();
     table.integer('toy_store_id');
-    table.string('name', 250);
-    table.string('description', 100);
-    table.integer('quantity');
+    table.string('name', 250).notNullable();
+    table.string('description', 100).notNullable();
+    table.integer('quantity').notNullable();
     table.foreign('toy_store_id').references('toy_store.id')
   });
 };
