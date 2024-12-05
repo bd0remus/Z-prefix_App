@@ -231,7 +231,23 @@ app.delete('items/:id', async (req, res) => {
 })
 
 //PATCH: update items
-
+app.patch('/items/:id', async (req, res) => {
+  const { id } = req.params;
+  const updatedInfo = req.body;
+  knex('item')
+  .where({ id })
+  .update(updatedInfo)
+  .then((data) => {
+    if (data > 0) {
+      res.status(204).json({message: "item not found"});
+    }
+  })
+  .catch((error) =>
+  res.status(500).json ({
+    message: error,
+  })
+);
+});
 
 
 app.listen(port, () => {
