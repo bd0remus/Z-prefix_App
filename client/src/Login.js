@@ -12,7 +12,6 @@ const Login = () => {
       body: JSON.stringify({username, password})
     })
     .then((response) => {
-      console.log('response received');
     return response.json();
     })
     .then((data) => {

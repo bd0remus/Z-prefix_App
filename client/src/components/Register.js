@@ -6,6 +6,8 @@ const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+
+
   const handleSubmit = () => {
     fetch('"http://localhost:3000/register"', {
       method: 'POST',
@@ -13,7 +15,6 @@ const Register = () => {
       body: JSON.stringify({firstName, lastName, username, password}),
     })
     .then((response) => {
-      console.log('response received');
     return response.json();
     })
     .then((data) => {
@@ -25,6 +26,8 @@ const Register = () => {
   };
 
   return (
+    <>
+    <h1>Register new User</h1>
     <form onSubmit={handleSubmit}>
       <label>
         First Name:
@@ -47,7 +50,9 @@ const Register = () => {
       </label>
       <br />
       <button type="submit">Register User</button>
+      <a href="http://localhost:3000/login" class="button-class">Already a user? Login!</a>
     </form>
+    </>
   );
 
 

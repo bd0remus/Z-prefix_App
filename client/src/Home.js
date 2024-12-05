@@ -14,7 +14,7 @@ const Home = () => {
   return (
   <div className="Home">
   <h1>Welcome to the Home Page!</h1>
-  <a href="http://localhost:3001/login">Log in or Register</a>
+  <a href="http://localhost:3000/register">Log in or Register</a>
   <ul>
     {items.map((item) => (
       <div key ={item.id}>

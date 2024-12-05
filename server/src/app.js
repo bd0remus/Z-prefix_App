@@ -4,11 +4,10 @@
 
 
 
-
 const express = require('express');
 const knex = require('knex')(require('../knexfile.js')["development"])
 const port = 3001;
-
+const bcrypt = require("bcryptjs");
 const app = express();
 app.use(express.json());
 
@@ -20,10 +19,6 @@ app.use(
   })
 );
 app.use(express.json());
-
-
-
-
 
 
 
@@ -61,7 +56,6 @@ app.post('/login', async (req, res) => {
 
 //CRUD FOR ITEMS
 
-
 // GET: Fetch all items (WORKS!!)
 app.get('/item', (request, response) => {
     knex('item')
@@ -71,6 +65,7 @@ app.get('/item', (request, response) => {
       response.json(itemNames);
     })
   })
+
 
 //GET: logs inputted item ID and logs/prints specific item info (WORKS!!)
   app.get('/item/:itemId', (request, response) => {
@@ -119,33 +114,22 @@ app.get('/item', (request, response) => {
 
 
 
-
-
-  const express = require("express");
-  const router = express.Router();
-  const bcrypt = require("bcryptjs");
-
-  const knex = require("knex")(require("./knexfile")["development"]);
-
-  router.get("/", (req, res) => {
-    res.status(200).json("Made it to the homepage");
-  });
-
-  router.post("/create", async (req, res) => {
-    const { firstname, lastname, email, password } = await req.body;
+//POST: REGISTER A NEW USER
+  app.post("/register", async (req, res) => {
+    const { firstname, lastname, username, password } = await req.body;
     const salt = bcrypt.genSaltSync(10);
 
     try {
-      if (!firstname || !lastname || !email || !password) {
+      if (!firstname || !lastname || !username || !password) {
         throw new Error();
       }
 
       const hash = bcrypt.hashSync(password, salt);
-      knex("users")
+      knex("toy_store")
         .insert({
           firstname: firstname,
           lastname: lastname,
-          email: email,
+          username: username,
           password: hash,
         })
         .then(() => res.status(201).json({ accountCreated: true }));
@@ -158,7 +142,45 @@ app.get('/item', (request, response) => {
   });
 
 
+//POST: LOG IN EXISTING USER
+  app.post("/login", (req, res) => {
+    const { username, password } = req.body;
+    try {
+      knex("toy_store")
+        .select("password", "id", "username")
+        .where({ username: username })
 
+        .then((dataArray) => {
+          console.log(dataArray);
+          if (
+            dataArray.length === 0 ||
+            !bcrypt.compareSync(password, dataArray[0].password)
+          ) {
+            res.status(200).json("No user found");
+          } else {
+            req.session.user = {
+              id: dataArray[0].id,
+              username: dataArray[0].username,
+            };
+
+            req.session.save((err) => {
+              if (err) {
+                console.error("Issue saving session");
+                return res.status(500).json({ message: "Express session error" });
+              }
+
+              res.status(200).json({
+                userAuth: true,
+                id: req.session.user.id,
+                email: req.session.user.username,
+              });
+            });
+          }
+        });
+    } catch (error) {
+      res.status(500).json({ message: err.message });
+    }
+  });
 
 
 
