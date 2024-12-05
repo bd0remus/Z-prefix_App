@@ -4,6 +4,7 @@ import './App.css';
 import Home from './Home'
 import Login from './Login'
 import Items from './Items'
+import Register from './components/Register'
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/items" element={<Items />} />
+      <Route path="/register" element={<Register />} />
       {/* <Route path="/register" element={<Register />} />
       <Route path="/items/:id" element={<Item />} /> */}
     </Routes>

@@ -15,13 +15,15 @@ const cors = require('cors')
 
 //New user registration
 app.post('/register', async (req, res) => {
-  const { id, firstname, lastname, username, password } = req.body;
+
   try{
-  const user = await knex('toy_store').insert({ id, firstname, lastname, username, password })
+  const { firstname, lastname, username, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const user = await knex('toy_store').insert({ firstname, lastname, username, password: hashedPassword })
+  res.json({message: 'Account created successfully'})
 } catch (error){
   res.status(500).json({message: 'Failed to create user'})
 }
-  res.send('User created');
 });
 
 //Returning User Login
