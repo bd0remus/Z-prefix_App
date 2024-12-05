@@ -211,15 +211,27 @@ app.post('/additems', async (req, res) => {
 }
 )
 
-
+//DELETE: Delete items by ID
 app.delete('items/:id', async (req, res) => {
-  try {
-    await knex('item').where({ id: req.params.id }).del();
-    res.json({message: 'Item deleted successfully'})
-  } catch(error){
-    res.status(500).json({ message: 'Item failed to delete.'})
-  }
+  const { id } = req.params;
+  knex('items')
+  .where({id})
+  .delete()
+  .then((data) => {
+    if (data > 0) {
+      res.status(204).json(data);
+    } else {
+      res.status(404).json({ message: "Item not found" });
+    }
+  }). catch ((err) =>
+    res.status(500).json({
+      message: err,
+    })
+  );
 })
+
+//PATCH: update items
+
 
 
 app.listen(port, () => {
