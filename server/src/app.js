@@ -78,6 +78,45 @@ app.post('/additems', async (req, res) => {
   }
 });
 
+// //PUT: Update an Item
+
+// server.put('/:id', async (req, res) => {
+//   const {id} = req.params;
+//   const { toy_store_id, id, name, description, quantity } = req.body;
+
+//   if(!toy_store_id || !id || !name || !description || !quantity) {
+//      return res.status(400).json({ error: 'All fields are required.' });
+//   }
+
+//   try{
+//     const updatedCount = await knex('events').where({id}).update({
+//       name,
+//       location,
+//       date,
+//       time
+//     });
+
+//   if (!updatedCount) {
+//     return res.status(404).json({ error: 'Event does not exist.'})
+//   }
+
+//   const updatedEvent = await knex('events').where({id}).first();
+//   res.json(updatedEvent);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Failed to update event.' });
+//   }
+// })
+
+app.delete('items/:id', async (req, res) => {
+  try {
+    await knex('item').where({ id: req.params.id }).del();
+    res.json({message: 'Item deleted successfully'})
+  } catch(error){
+    res.status(500).json({ message: 'Item failed to delete.'})
+  }
+})
+
 
 app.listen(port, () => {
   console.log('Your Knex and Express applications are running successfully!')
