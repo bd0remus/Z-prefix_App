@@ -177,6 +177,22 @@ app.get('/item', (request, response) => {
       response.status(200).send(thisUser);
 
 
+      //GET: logs username and logs/prints specific user info
+  app.get('/user/:username', (request, response) => {
+    const { username } =req.params;
+
+    knex('toy_store')
+    .where({username})
+    .first()
+    .then(user => {
+      if (data) {
+        res.status(200).json(data);
+      } else {
+        res.status(404).json({message: 'User not found'})
+      }
+    })
+
+
     //NOW THAT YOU CAN ISOLATE A MANAGER, YOU MUST BE ABLE TO ISOLATE THE ITEMS THEY CREATED:
     app.get('/items/:userId', (request, response) => {
       const {userId} = request.params;
