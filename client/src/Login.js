@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 
 const Login = () => {
@@ -7,27 +6,38 @@ const Login = () => {
   const [password, setPassword] = useState('');
 
   const handleSubmit = async () => {
-    try {
-      const response = await axios.post('/login', {username, password});
-      window.location.href = '/items' //should return user to the items page
-    } catch (error) {
-      console.error(error);
-    }
-  }
+    fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json'},
+      body: JSON.stringify({username, password})
+    })
+    .then((response) => {
+      console.log('response received');
+    return response.json();
+    })
+    .then((data) => {
+      console.log('data received:', data);
+    })
+    .catch((error) => {
+      console.error('error:', error);
+  });
+
+  };
 
 
 return (
-  <form onsubmit={handleSubmit()}>
+  <form onSubmit={handleSubmit()}>
   <label>
     Username:
-    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+    <input type="text" value={username} onChange={(event) => setUsername(event.target.value)} />
   </label>
   <br />
   <label>
     Password:
-    <input type="text" value={password} onChange={(e) => setPassword(e.target.value)} />
+    <input type="text" value={password} onChange={(event) => setPassword(event.target.value)} />
     </label>
     <br />
+    <button type="submit">Log in</button>
   </form>
 )
 };

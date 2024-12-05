@@ -7,7 +7,7 @@ const Register = () => {
   const [password, setPassword] = useState('');
 
   const handleSubmit = () => {
-    fetch('/api/register', {
+    fetch('"http://localhost:3000/register"', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({firstName, lastName, username, password}),

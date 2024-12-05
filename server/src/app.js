@@ -6,16 +6,23 @@ const app = express();
 app.use(express.json());
 
 const cors = require('cors')
-// app.use(cors());
-// app.use(
-//   cors({
-//     origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
-//   })
-// );
+app.use(cors());
+app.use(
+  cors({
+    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+  })
+);
+app.use(express.json());
+
+
+
+
+
+
+
 
 //New user registration
 app.post('/register', async (req, res) => {
-
   try{
   const { firstname, lastname, username, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -28,13 +35,13 @@ app.post('/register', async (req, res) => {
 
 //Returning User Login
 app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
   try {
+    const { username, password } = req.body;
     const user = await knex('toy_store').where({ username });
     if (!user){
       return res.status(401).json({message: 'Invalid username or password'})
     }
-    const validPassword = await knex('toy_store_password').compare(password);
+    const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       return res.status(401).json({message: 'Invalid username or password'})
     }
@@ -48,8 +55,8 @@ app.post('/login', async (req, res) => {
 //CRUD FOR ITEMS
 
 
-// GET: Fetch all items (WORKS)
-app.get('/', (request, response) => {
+// GET: Fetch all items (WORKS!!)
+app.get('/item', (request, response) => {
     knex('item')
     .select('*')
     .then(items => {
@@ -57,6 +64,24 @@ app.get('/', (request, response) => {
       response.json(itemNames);
     })
   })
+//GET: logs inputted item ID and logs/prints specific item info (WORKS!!)
+  app.get('/item/:itemId', (request, response) => {
+    knex('item')
+    .select('*')
+    .then(items => {
+      var {itemId} = request.params;
+      console.log(`here is my item id:  ${itemId}`)
+      let myItem = items.find(element => {
+        console.log(element.id, parseInt(itemId))
+        return element.id === parseInt(itemId) })
+         console.log(`here is my item:`, myItem)
+         response.status(200).send(myItem);
+    })
+  })
+
+  //GET: All items of a toy_store_id
+  
+
 
 
 //POST: Create new Items

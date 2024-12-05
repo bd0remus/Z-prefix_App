@@ -4,21 +4,25 @@ const Home = () => {
 
 
     const [items, setItems] = useState([]);
-    const [error, setError] = useState([null])
   useEffect(() => {
-    fetch("http://localhost:3001/items")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to fetch events");
-        }
-        return res.json();
-      })
-      .then((data) => setItems(data))
-      .catch((err) => setError(err.message));
+    fetch('http://localhost:3001/items')
+      .then(res => res.json())
+      .then((data) => setItems(data));
   }, []);
-  // return (
-  //   <h1>Welcome to the Home Page.</h1>
-  // )
+
+
+
+  return (
+  <div className="Home">
+  <h1>Welcome to the Home Page.</h1>
+  <p>
+ app.post('/items', (req, res) => {
+    console.log(req.body.email) // "sam@gmail.com"
+    console.log(req.body.password) // "chompz4lyfe"
+  })
+  </p>
+  </div>
+  )
 }
 
 export default Home;
