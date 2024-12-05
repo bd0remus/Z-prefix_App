@@ -57,10 +57,6 @@ app.get('/', (request, response) => {
   })
 
 
-
-// Middleware to parse JSON (useful for POST/PUT requests)
-server.use(express.json());
-
 //POST: Create new Items
 
 app.post('/additems', async (req, res) => {
