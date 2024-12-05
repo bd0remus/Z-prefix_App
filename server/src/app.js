@@ -1,3 +1,10 @@
+
+
+//THIS IS MY RESTful API THAT EXPOSES THE ENDPOINTS NEEDED FOR INTERACTING WITH THE DATABASE
+
+
+
+
 const express = require('express');
 const knex = require('knex')(require('../knexfile.js')["development"])
 const port = 3001;
@@ -60,10 +67,11 @@ app.get('/item', (request, response) => {
     knex('item')
     .select('*')
     .then(items => {
-      var itemNames = items.map(item => item.name)
+      var itemNames = items.map(item => item)
       response.json(itemNames);
     })
   })
+
 //GET: logs inputted item ID and logs/prints specific item info (WORKS!!)
   app.get('/item/:itemId', (request, response) => {
     knex('item')
@@ -79,14 +87,90 @@ app.get('/item', (request, response) => {
     })
   })
 
-  //GET: All items of a toy_store_id
-  
+  //GET: logs inputted user ID and logs/prints specific user info (WORKS!!)
+  app.get('/user-items/:userId', (request, response) => {
+    knex('toy_store')
+    .select('*')
+    .then(user => {
+      var {userId} = request.params;
+      console.log(`here is my user id:  ${userId}`)
+     let thisUser = user.find(element => {
+      console.log(element.id, parseInt(userId))
+      return element.id === parseInt(userId) })
+     console.log("here is this user", thisUser)
+      response.status(200).send(thisUser);
+
+
+    //NOW THAT YOU CAN ISOLATE A MANAGER, YOU MUST BE ABLE TO ISOLATE THE ITEMS THEY CREATED:
+    // knex('item')
+    // .select('*')
+    // .then(items => {
+    //   var {itemId} = request.params;
+    //   let myItem = items.find(element => {
+    //     console.log(element.id, parseInt(itemId))
+    //   })
+    //   if(userId === itemId){
+    //     console.log(myItem)
+    //   }
+    //    })
+     })
+  })
+
+
+
+
+
+
+  const express = require("express");
+  const router = express.Router();
+  const bcrypt = require("bcryptjs");
+
+  const knex = require("knex")(require("./knexfile")["development"]);
+
+  router.get("/", (req, res) => {
+    res.status(200).json("Made it to the homepage");
+  });
+
+  router.post("/create", async (req, res) => {
+    const { firstname, lastname, email, password } = await req.body;
+    const salt = bcrypt.genSaltSync(10);
+
+    try {
+      if (!firstname || !lastname || !email || !password) {
+        throw new Error();
+      }
+
+      const hash = bcrypt.hashSync(password, salt);
+      knex("users")
+        .insert({
+          firstname: firstname,
+          lastname: lastname,
+          email: email,
+          password: hash,
+        })
+        .then(() => res.status(201).json({ accountCreated: true }));
+    } catch (err) {
+      res.status(500).json({
+        accountCreated: false,
+        message: err.message,
+      });
+    }
+  });
+
+
+
+
+
+
+
+
 
 
 
 //POST: Create new Items
 
 app.post('/additems', async (req, res) => {
+
   const { toy_store_id, id, name, description, quantity } = req.body;
 
   if (!toy_store_id || !id || !name || !description || !quantity) {

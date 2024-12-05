@@ -4,7 +4,7 @@
  */
 exports.up = function(knex) {
   return knex.schema.createTable('item', table => {
-    table.increments();
+    table.increments('id').primary();
     table.integer('toy_store_id');
     table.unique('id', 'unique_id_constraint', {ignore: true})
     table.string('name', 250).notNullable();
