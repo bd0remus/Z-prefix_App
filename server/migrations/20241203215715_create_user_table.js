@@ -4,8 +4,7 @@
  */
 exports.up = function(knex) {
   return knex.schema.createTable('toy_store', table => {
-    table.increments('id').pirmary();
-    table.dropUnique();
+    table.increments();
     table.string('firstname', 250);
     table.string('lastname', 250).notNullable();
     table.string('username', 250).notNullable();

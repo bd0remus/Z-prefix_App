@@ -4,7 +4,7 @@
  */
 exports.up = function(knex) {
   return knex.schema.createTable('item', table => {
-    table.increments('id').primary();
+    table.increments();
     table.integer('toy_store_id');
     table.unique('id', 'unique_id_constraint', {ignore: true})
     table.string('name', 250).notNullable();
@@ -20,7 +20,7 @@ exports.up = function(knex) {
  */
 exports.down = function(knex) {
   return knex.schema.alterTable('item', table => {
-    table.dropForeign('toy_store_id', 'id')
+    table.dropForeign('toy_store_id')
   })
   .then(function() {
     return knex.schema.dropTableIfExists('item');
