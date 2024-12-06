@@ -2,6 +2,7 @@
 DATABASE SETUP:
 
  *NOTE: replace the develop details in the knex files with your database's connection details*
+
 run:
 
 docker pull postgres
@@ -16,7 +17,7 @@ docker exec -it <PSQL-Container-ID> bash
 psql -U postgres
 
 CREATE DATABASE inventory;
-
+----------------------------------------------------------------------------------------------------------------------------
 BACKEND SETUP:
 
 cd server
@@ -29,6 +30,7 @@ npx knex seed:run
 
 nodemon server.js
 
+----------------------------------------------------------------------------------------------------------------------------
 
 FRONTEND SETUP:
 
