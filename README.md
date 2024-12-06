@@ -17,6 +17,7 @@ docker exec -it <PSQL-Container-ID> bash
 psql -U postgres
 
 CREATE DATABASE inventory;
+
 ----------------------------------------------------------------------------------------------------------------------------
 BACKEND SETUP:
 
