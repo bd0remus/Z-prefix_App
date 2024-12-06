@@ -1,25 +1,26 @@
 import React, { useState } from 'react';
+import {useNavigate} from 'react-router-dom';
+import axios from 'axios';
+
 
 
 const Login = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (response, request) => {
     fetch('/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify({username, password})
     })
-    .then((response) => {
-    return response.json();
-    })
-    .then((data) => {
-      console.log('data received:', data);
-    })
-    .catch((error) => {
-      console.error('error:', error);
-  });
+    if (response) {
+      navigate(`/user/${username}`)
+    }
+    else {
+      console.log('error:')
+    }
 
   };
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const Register = () => {
   const [firstName, setFirstName] = useState('');
@@ -8,23 +9,22 @@ const Register = () => {
 
 
 
-  const handleSubmit = () => {
-    fetch('"http://localhost:3000/register"', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({firstName, lastName, username, password}),
-    })
-    .then((response) => {
-    return response.json();
-    })
-    .then((data) => {
-      console.log('data received:', data);
-    })
-    .catch((error) => {
-      console.error('error:', error);
-  });
+  const handleSubmit = async () => {
+
+    try {
+      const response = await axios.post("http://localhost:3000/register", {
+        firstName,
+        lastName,
+        username,
+        password
+      });
+      console.log(response.data)
+    } catch (error) {
+      console.error(error)
+    }
   };
 
+  
   return (
     <>
     <h1>Register new User</h1>
