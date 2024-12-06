@@ -3,6 +3,7 @@ DATABASE SETUP:
 
  *NOTE: replace the develop details in the knex files with your database's connection details*
 run:
+
 docker pull postgres
 
 mkdir -p $HOME/docker/volumes/postgres
@@ -17,6 +18,7 @@ psql -U postgres
 CREATE DATABASE inventory;
 
 BACKEND SETUP:
+
 cd server
 
 npm i
@@ -29,6 +31,7 @@ nodemon server.js
 
 
 FRONTEND SETUP:
+
 cd client
 
 npm i
