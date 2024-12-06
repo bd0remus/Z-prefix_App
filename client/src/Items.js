@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
-
 
 const Items = () => {
-const [items, setItems] = useState([]);
 
+const [items, setItems] = useState([]);
 useEffect(() => {
-  axios.get('/items')
-  .then((response) => {
-    setItems(response.data)
-  })
-  .catch((error) => {
-    console.error(error);
-  });
-}, []);
+  fetch('http://localhost:3001/item/:itemId')
+    .then(res => res.json())
+    .then((data) => setItems(data));
+    }, []);
 
 return (
   <ul>
@@ -28,6 +21,7 @@ return (
 );
 
 }
+
 
 
 export default Items;
