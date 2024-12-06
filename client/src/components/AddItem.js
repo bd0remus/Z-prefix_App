@@ -1,44 +1,52 @@
 import React, { useState, useEffect } from "react";
+import {useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 
-//TURN THIS INTO NEW ITEM
 
-const Events = () => {
-  const [eventName, setEventName] = useState();
-  const [newQueue, setnewQueue] = useState();
-  const [events, setEvents] = useState([]);
-  const [newEvent, setNewEvent] = useState({
-    name: "",
-    location: "",
-    date: "",
-    time: "",
-  });
-  const [error, setError] = useState(null);
+ const AddItem = () => {
+  const { id, username } = useParams();
+  const navigate = useNavigate();
 
- // Add a new Item
- const addItem = () => {
-  const { name, location, date, time } = newEvent;
-  if (!name || !location || !date || !time) {
-    alert("All fields are required");
-    return;
-  }
-
-  fetch("http://localhost:8080/events", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newEvent),
+  const [itemDetails, setItemDetails] = useState({
+    userId: id,
+    item_name: "",
+    quantity: "",
+    description: "",
   })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error("Failed to add event");
+
+  const createItem = async (newItem) => {
+    try{
+      console.log("item created:", newItem);
+
+      const response = await fetch("http://localhost:3001/additems", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+          body: JSON.stringify(newItem),
+      });
+
+      if (!response.ok) {
+        throw new Error("Post request failed");
       }
-      return res.json();
-    })
-    .then((addedEvent) => {
-      setEvents((prevEvents) => [...prevEvents, addedEvent]);
-      setNewEvent({ name: "", location: "", date: "", time: "" });
-    })
-    .catch((err) => setError(err.message));
-};
+        return 1;
+    } catch (error){
+      console.log("Error creating item:", error);
+      return 0;
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setItemDetails({
+      ...itemDetails,
+      [name]: value,
+    });
+  };
+
+
+
+ }
+
+ export default AddItem;

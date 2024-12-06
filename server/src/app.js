@@ -15,7 +15,6 @@ app.use(cors());
 
 //const bcrypt = require("bcryptjs");
 const saltRounds = 10;
-//const { findUserByUsername } = require('./findUser.js')
 
 
 //Middleware for posts and patching
@@ -28,6 +27,47 @@ app.use(express.json());
 
 
 
+//
+//CRUD FOR USERS
+//
+
+
+//GET: all users
+app.get('/users', async (req, res) => {
+  const allUsers = await knex("users")
+  res.status(200).json(allUsers)
+})
+
+ //GET: logs inputted user ID and logs/prints specific user info (WORKS!!)
+  app.get('/user-items/:userId', (request, response) => {
+    knex('toy_store')
+    .select('*')
+    .then(user => {
+      var {userId} = request.params;
+      console.log(`here is my user id:  ${userId}`)
+     let thisUser = user.find(element => {
+      console.log(element.id, parseInt(userId))
+      return element.id === parseInt(userId) })
+     console.log("here is this user", thisUser)
+      response.status(200).send(thisUser);
+     })
+    });
+
+
+      //GET: logs username and logs/prints specific user info
+  app.get('/user/:username', (request, response) => {
+    const { username } =req.params;
+
+    knex('toy_store')
+    .where({username})
+    .first()
+    .then(user => {
+      if (data) {
+        res.status(200).json(data);
+      } else {
+        res.status(404).json({message: 'User not found'})
+      }
+    })
 
 //POST: REGISTER A NEW USER
   app.post("/register", async (req, res) => {
@@ -58,7 +98,7 @@ app.use(express.json());
 
 
 //POST: LOG IN EXISTING USER
-  app.post("/login", (req, res) => {
+  app.post("/login", async (req, res) => {
     const { username, password } = req.body;
     try {
       knex("toy_store")
@@ -129,7 +169,7 @@ app.post('/login', async (req, res) => {
 
 })
 
-
+//
 
 
 
@@ -163,34 +203,7 @@ app.get('/item', (request, response) => {
     })
   })
 
-  //GET: logs inputted user ID and logs/prints specific user info (WORKS!!)
-  app.get('/user-items/:userId', (request, response) => {
-    knex('toy_store')
-    .select('*')
-    .then(user => {
-      var {userId} = request.params;
-      console.log(`here is my user id:  ${userId}`)
-     let thisUser = user.find(element => {
-      console.log(element.id, parseInt(userId))
-      return element.id === parseInt(userId) })
-     console.log("here is this user", thisUser)
-      response.status(200).send(thisUser);
 
-
-      //GET: logs username and logs/prints specific user info
-  app.get('/user/:username', (request, response) => {
-    const { username } =req.params;
-
-    knex('toy_store')
-    .where({username})
-    .first()
-    .then(user => {
-      if (data) {
-        res.status(200).json(data);
-      } else {
-        res.status(404).json({message: 'User not found'})
-      }
-    })
 
 
     //NOW THAT YOU CAN ISOLATE A MANAGER, YOU MUST BE ABLE TO ISOLATE THE ITEMS THEY CREATED:
@@ -206,7 +219,7 @@ app.get('/item', (request, response) => {
          }))
        })
      })
-  })
+
 
 
 
